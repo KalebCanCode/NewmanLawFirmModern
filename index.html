@@ -424,7 +424,7 @@
                     <a href="https://www.facebook.com/jarahn.newman.5"><img src="assets/icons8-facebook.svg"/></a>
                 </div>
                 <div class="col-md-7">
-                    <form id= "myForm" method="POST">
+                    <form id= "contact-form" method="POST" action="/Users/kalebnewman/Desktop/newmanlawmodern/NewmanLawFirmModern/settings.py">
                         <h4 class="mb-4">Drop Us A Line</h4>
 
                         <div class="form-row">
@@ -448,20 +448,25 @@
                         </div>                          
                     </form>
                     <script>
-                        const form = document.querySelector('#myForm');
+                        // Select the form
+                        const form = document.querySelector('#contact-form');
+                        // Add a submit event listener to the form
                         form.addEventListener('submit', (event) => {
                             event.preventDefault();
+                            // Create a FormData object to store the form data
                             const formData = new FormData(form);
-
-                            // Use the XMLHttpRequest object to send the form data to the Python script
-                            const xhr = new XMLHttpRequest();
-                            xhr.open('POST', '/Users/kalebnewman/Desktop/newmanlawmodern/NewmanLawFirmModern/settings.py');
-                            xhr.onreadystatechange = function() {
-                                if (xhr.readyState === 4 && xhr.status === 200) {
-                                    console.log(xhr.responseText);
-                                }
-                            };
-                            xhr.send(formData);
+                            // Use the fetch API to send the form data to the Python script
+                            fetch('/Users/kalebnewman/Desktop/newmanlawmodern/NewmanLawFirmModern/settings.py', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => response.text())
+                            .then(data => {
+                                console.log(data);
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
                         });
                     </script>
                 </div>

@@ -1,52 +1,49 @@
 import os
-from dotenv import load_dotenv
 import json
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 import base64
+from email.mime.text import MIMEText
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+from email.mime.multipart import MIMEMultipart
 
 
+# Your credentials should be in a json file and should be loaded
+# You can download the credentials from the google developer console
+with open("/Users/kalebnewman/Desktop/newmanlawmodern/NewmanLawFirmModern/client_secret_640267311334-cilbp288u7hafcaedhgmuhins1p9am9i.apps.googleusercontent.com.json", "r") as f:
+    credentials = json.load(f)
 
+# Build the credentials object
+from google.oauth2.credentials import Credentials
+creds = Credentials.from_authorized_user_info(info=credentials)
 
-path_to_env_file = './.env'
-load_dotenv(path_to_env_file)
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+def send_email(to_email, name, email, phone, message):
+    try:
+        # Create a Gmail client
+        service = build('gmail', 'v1', credentials=creds)
 
-with open('client_secret_640267311334-kv6hobqs9eb9phhrv63bckg218oga5vi.apps.googleusercontent.com.json') as json_file:
-    client_secret = json.load(json_file)
+        # Create the message
+        message = MIMEMultipart()
+        text = MIMEText(f"{message}\n\n Name: {name}\n Email: {email}\n Phone: {phone}")
+        message.attach(text)
 
-creds = Credentials.from_authorized_user_info(info=client_secret)
+        # Send the message
+        message['to'] = to_email
+        message['subject'] = 'Contact Form Submission'
+        create_message = {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()}
+        send_message = (service.users().messages().send(userId="me", body=create_message).execute())
+        print(F'sent message to {to_email} Message Id: {send_message["id"]}')
+    except HttpError as error:
+        print(F'An error occurred: {error}')
+        send_message = None
+    return send_message
 
-# Build the Gmail API client
-gmail_service = build('gmail', 'v1', credentials=creds)
+# handle the post request here
+def handle_request(request):
+    data = request.form
+    name = data.get("name")
+    email = data.get("email")
+    phone = data.get("phone")
+    message = data.get("message")
+    to_email = "Kalebnewman2@gmail.com"
 
-# Handle the form submission
-def send_email(request):
-    if request.method == 'POST':
-        # Get the form data
-        name = request.form['name']
-        email = request.form['email']
-        phone = request.form['phone']
-        message = request.form['message']
-
-        # Validate the input
-        if not name or not email or not message:
-            return 'Please fill out all fields'
-
-        # Send the email
-        try:
-            message = MIMEMultipart()
-            text = MIMEText(f"Name: {name}\nEmail: {email}\nPhone: {phone}\nMessage: {message}")
-            message.attach(text)
-            message['to'] = 'Kalebnemwan2@gmail.com'
-            message['subject'] = 'New Contact Form Submission'
-            message['from'] = email
-            create_message = {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()}
-            send_message = (gmail_service.users().messages().send(userId="me", body=create_message).execute())
-            return 'Email sent successfully'
-        except Exception as error:
-            return 'An error occurred: {}'.format(error)
-    return 'Invalid request'
+    send_email(to_email, name, email, phone, message)
