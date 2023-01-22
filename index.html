@@ -424,7 +424,7 @@
                     <a href="https://www.facebook.com/jarahn.newman.5"><img src="assets/icons8-facebook.svg"/></a>
                 </div>
                 <div class="col-md-7">
-                    <form id= "myForm" action="/" name="contactForm" method="POST">
+                    <form id= "myForm" method="POST">
                         <h4 class="mb-4">Drop Us A Line</h4>
 
                         <div class="form-row">
@@ -447,6 +447,26 @@
                             </div>                          
                         </div>                          
                     </form>
+                    <script>
+                        const form = document.querySelector('#contact-form');
+                        form.addEventListener('submit', (event) => {
+                            event.preventDefault();
+                            const formData = new FormData(form);
+
+                            // Use the fetch API to send the form data to the Python script
+                            fetch('/path/to/python/script', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => response.text())
+                            .then(data => {
+                                console.log(data);
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                        });
+                    </script>
                 </div>
             </div>
             <!-- Page Footer -->
