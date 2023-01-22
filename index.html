@@ -448,13 +448,13 @@
                         </div>                          
                     </form>
                     <script>
-                        const form = document.querySelector('#contact-form');
+                        const form = document.querySelector('#myForm');
                         form.addEventListener('submit', (event) => {
                             event.preventDefault();
                             const formData = new FormData(form);
 
                             // Use the fetch API to send the form data to the Python script
-                            fetch('/path/to/python/script', {
+                            fetch('settings.py', {
                                 method: 'POST',
                                 body: formData
                             })
