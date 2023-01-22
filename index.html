@@ -453,18 +453,15 @@
                             event.preventDefault();
                             const formData = new FormData(form);
 
-                            // Use the fetch API to send the form data to the Python script
-                            fetch('settings.py', {
-                                method: 'POST',
-                                body: formData
-                            })
-                            .then(response => response.text())
-                            .then(data => {
-                                console.log(data);
-                            })
-                            .catch(error => {
-                                console.error(error);
-                            });
+                            // Use the XMLHttpRequest object to send the form data to the Python script
+                            const xhr = new XMLHttpRequest();
+                            xhr.open('POST', '/Users/kalebnewman/Desktop/newmanlawmodern/NewmanLawFirmModern/settings.py');
+                            xhr.onreadystatechange = function() {
+                                if (xhr.readyState === 4 && xhr.status === 200) {
+                                    console.log(xhr.responseText);
+                                }
+                            };
+                            xhr.send(formData);
                         });
                     </script>
                 </div>
