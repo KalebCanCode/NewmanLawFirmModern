@@ -6,6 +6,10 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from email.mime.multipart import MIMEMultipart
 
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
 
 # Your credentials should be in a json file and should be loaded
 # You can download the credentials from the google developer console
@@ -46,4 +50,12 @@ def handle_request(request):
     message = data.get("message")
     to_email = "Kalebnewman2@gmail.com"
 
+
+    
+
     send_email(to_email, name, email, phone, message)
+    return jsonify({"message": "Email sent"})
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
