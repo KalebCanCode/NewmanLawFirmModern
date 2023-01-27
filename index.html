@@ -425,7 +425,7 @@
                 </div>
                 <div class="col-md-7">
                     <form action="https://formspree.io/f/mzbqdzyv"
-                    method="POST">
+                    method="POST" id="formy">
                         <h4 class="mb-4">Drop Us A Line</h4>
 
                         <div class="form-row">
@@ -448,29 +448,19 @@
                             </div>                          
                         </div>                          
                     </form>
-                    <!-- <script>
-                        // Select the form
-                        const form = document.querySelector('#contact-form');
-                        // Add a submit event listener to the form
-                        form.addEventListener('submit', (event) => {
-                            event.preventDefault();
-                            // Create a FormData object to store the form data
-                            const formData = new FormData(form);
-                            // Use the fetch API to send the form data to the Python script
-                            
-                            fetch('/Users/kalebnewman/Desktop/newmanlawmodern/NewmanLawFirmModern/settings.py', {
-                                method: 'POST',
-                                body: formData
-                            })
-                            .then(response => response.text())
-                            .then(data => {
-                                console.log(data);
-                            })
-                            .catch(error => {
-                                console.error(error);
-                            });
-                        });
-                    </script> -->
+                    <<script>
+                        function clearForm() {
+                            // Get all the input elements in the form
+                            var inputs = document.querySelectorAll("input, textarea, select");
+
+                            // Iterate through the elements and reset their value
+                            for (var i = 0; i < inputs.length; i++) {
+                                inputs[i].value = "";
+                            }
+                            }
+
+                            document.getElementById("#formy").addEventListener("submit", clearForm);
+                    </script> 
                 </div>
             </div>
             <!-- Page Footer -->
